@@ -23,6 +23,6 @@ for(int x:arr)sum+=x;
 int ans=exp_sum-sum;
 cout<<ans;
 //TC:O(N)
-//SC:O(N)
+//SC:O(1)
 return 0;
 }
