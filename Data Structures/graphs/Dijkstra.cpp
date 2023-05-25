@@ -1,64 +1,70 @@
 #include <bits/stdc++.h>
 using namespace std;
-const int N = 1e5 + 10;
+// const int N = 20;
 const int INF = 1e9 + 10;
-vector<pair<int, int>> g[N];
-void dijkstra(int source, int n, vector<pair<int, int>> g[N])
+// For finding shortest path
+// Use either set (Fastest) or Priority queue
+// Not applicable to graphs with negative weight cycles
+void printShortestPath(vector<vector<int>>paths,int dest)
 {
-    vector<int> vis(N, 0);
+  for(auto x: paths[dest]) cout<<x<<"->";
+}
+vector<int> Dijkstra(unordered_map<int, vector<pair<int, int>>> adj, int s1)
+{
+    int N = adj.size();
     vector<int> dist(N, INF);
-    set<pair<int, int>> st; // weight,vertex
-    st.insert({0, source});
-    dist[source] = 0;
+    vector<int> vis(N, INF);
+    set<pair<int, int>> st;
+    // dist,node
+    st.insert({0, s1});
+    vector<vector<int>> shortestPaths(N);
     while (st.size() > 0)
     {
-        auto node = *st.begin();
+        auto node = *st.begin(); // Min element in node
         int v = node.second;
-        int v_dist = node.first;
+        int distance = node.first;
         st.erase(st.begin());
-        if (vis[v])
+        // Agar ek baar koi node queue se nikal gayi to use dobara process nahi karna h
+        if (vis[v] == 1)
             continue;
         vis[v] = 1;
-        for (auto child : g[v])
+        for (auto child : adj[v])
         {
             int child_v = child.first;
             int wt = child.second;
-            if (dist[v] + wt < dist[child_v])
+            if (wt + distance < dist[child_v])
             {
-                dist[child_v] = dist[v] + wt;
+                dist[child_v] = wt + distance;
                 st.insert({dist[child_v], child_v});
+                // Update the shortest path to the child node
+                shortestPaths[child_v] = shortestPaths[v]; // Copy the path from the parent node
+                shortestPaths[child_v].push_back(child_v); // Add the child node to the path
             }
         }
-        int ans = 0;
-        for (int i = 1; i <= n; i++)
-        {
-            if (dist[i] == INF)
-                return -1;
-            ans = max(ans, dist[i]);
-        }
-        return ans;
     }
-
-    networkDelayTime(vector<vector<int>> & times, int n, int k)
-    {
-
-        for (auto vec : times)
-        {
-            g[vec[0]].push_back({vec[1], vec[2]});
-        }
-        return dijkstra(k, n, g);
-    }
+    dist[0]=0;
+  printShortestPath(shortestPaths,1);
+    return dist;
 }
 int main()
 {
-    int n, e;
-    cout << "Enter n and m" << endl;
-    cin >> n >> m;
-    for (int i = 0; i < m; i++)
-    {
-        int x, y, wt;
-        cin >> x >> y >> wt;
-        g[x].push_back({y, wt});
-    }
+    unordered_map<int, vector<pair<int, int>>> adj;
+    // node,weight pair
+    // adj[0] = {{1, 4}, {2, 4}};
+    // adj[1] = {{0, 4}, {2, 2}};
+    // adj[2] = {{0, 4}, {1, 2}, {3, 3}, {4, 1}, {5, 6}};
+    // adj[3] = {{2, 3}, {5, 2}};
+    // adj[4] = {{2, 1}, {5, 3}};
+    // adj[5] = {{2, 6}, {3, 2}, {4, 3}};
+
+    adj[0] = {{2, 1}, {3, 1}};
+    adj[1] = {{4,1}};
+    adj[2] = {{0, 1}};
+    adj[3] = {{0, 1}, {4,1}};
+    adj[4] = {{3, 1}, {1, 1}};
+    vector<int> a = Dijkstra(adj, 0);
+    for (auto x : a)
+        cout << x << " ";
     return 0;
 }
+// 4,4,7,5,8

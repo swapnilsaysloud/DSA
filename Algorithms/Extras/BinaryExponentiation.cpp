@@ -38,7 +38,7 @@ long long binpowRecursive(long long a, long long b)
 }
 int main()
 {
-    cout << BinaryIterative(2, 4);
-    cout << binpowRecursive(2, 2);
+    cout << BinaryIterative(0, 4);
+    //cout << binpowRecursive(2, 2);
     return 0;
 }

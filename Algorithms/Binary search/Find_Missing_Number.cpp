@@ -2,7 +2,7 @@
 the range of [1, N], the task is to find the missing 
 number from the first N integers*/
 #include<bits/stdc++.h>
-using namespace std;
+using namespace std;  
 int main(){
 /*
 TC:O(N)
